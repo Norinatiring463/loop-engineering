@@ -48,11 +48,16 @@ Start a new session — that's it. (Other tools: [Install](#install).)
 ```
 loop-engineering/
 ├── SKILL.md                          # the skill itself (frontmatter + instructions)
-└── references/
-    ├── loop-patterns.md              # heartbeat / cron / hook / goal + Ralph loop
-    ├── context-engineering.md        # compaction, note-taking, sub-agents, JIT retrieval
-    ├── review-checklist.md           # per-principle diagnostic, severity-ordered
-    └── sources.md                    # the 12 source articles, with one-line summaries
+├── references/
+│   ├── loop-patterns.md              # heartbeat / cron / hook / goal + Ralph loop
+│   ├── context-engineering.md        # compaction, note-taking, sub-agents, JIT retrieval
+│   ├── review-checklist.md           # per-principle diagnostic, severity-ordered
+│   └── sources.md                    # the 12 source articles, with one-line summaries
+├── evals/                            # validation case library + benchmark evidence
+│   ├── evals.json                    # 11 graded design / review / diagnose cases
+│   ├── RESULTS.md                    # with-skill vs no-skill results, 3 iterations
+│   └── files/                        # input scripts the review cases point at
+└── assets/                           # README hero image
 ```
 
 A skill is just a folder with a `SKILL.md` (YAML frontmatter + Markdown). That
@@ -123,13 +128,16 @@ The numbers above aren't hand-waving — the held-out cases are in this repo so 
 can re-run them yourself, and the full per-iteration results (with an honest note
 on where the skill *doesn't* help) are in [`evals/RESULTS.md`](evals/RESULTS.md).
 
-- **The eval set** lives in [`evals/evals.json`](evals/evals.json): three
-  deliberately tricky cases — one **design** (CI/PR-fixer), one **review** (a
-  flawed support-ticket bot, code in [`evals/files/`](evals/files/)), and one
-  **diagnose** (a runaway research loop). Each case ships an `expected_output`
-  rubric of the specific things a correct answer must nail (machine-checkable
-  done-condition, all exits with real numbers, deterministic verification,
-  human-gate on irreversible actions, etc.).
+- **The eval set** lives in [`evals/evals.json`](evals/evals.json): 11
+  deliberately tricky cases spanning all four loop patterns (heartbeat / cron /
+  hook / goal) plus long-horizon context, across **design**, **review**, and
+  **diagnose** modes — from a CI/PR-fixer design to a flawed support-ticket bot
+  (code in [`evals/files/`](evals/files/)) to a runaway research loop. Each case
+  ships an `expected_output` rubric of the specific things a correct answer must
+  nail (machine-checkable done-condition, all exits with real numbers,
+  deterministic verification, human-gate on irreversible actions, etc.). The
+  87% → 100% headline comes from the subtle/under-specified subset; the
+  per-iteration breakdown is in [`evals/RESULTS.md`](evals/RESULTS.md).
 
 **Method (same as the headline number):**
 

@@ -2,6 +2,8 @@
 
 # Loop Engineering — 用于设计与审查自主 agent loop 的 skill
 
+![Loop Engineering — 设计与审查 agent 自走的 loop：trigger、check、act、verify，含 success/failure/budget exit 与 human gate](assets/hero.png)
+
 Loop engineering 是 prompt engineering 之后的下一门学科。prompt 优化的是单次交互；**loop** 优化的是围绕它的自主行为——*何时*运行 agent、*什么*触发它、*如何*验证自身工作、*何时*停止，以及*何时*交还给人类。
 
 本 skill 为编程 agent 提供一套经过实战检验的框架，用于两种场景：
@@ -11,7 +13,15 @@ Loop engineering 是 prompt engineering 之后的下一门学科。prompt 优化
 
 它将 12 个来源（Anthropic 的 context engineering 指南、Ralph loop / RPI 方法论、Claude Code 的 agent-loop 文档，以及 2026 年的"loop engineering"论述）提炼为七条核心原则及参考资料。
 
-> 在与无 skill 基线对比的 benchmark 测试中（特意使用了棘手案例），本 skill 将通过率从 87% 提升至 100%，同时输出更一致、成本更低——其优势体现在强模型通常会遗漏的细微失效模式上（cron stale-prompt 漂移、盲目重试浪费、不可逆操作缺少人工 gate）。
+**快速开始（Claude Code）：**
+
+```bash
+git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
+```
+
+开启一个新会话即可。（其他工具见 [安装](#安装)。）
+
+> 在与无 skill 基线对比的 benchmark 测试中（特意使用了棘手案例），本 skill 将通过率从 87% 提升至 100%，同时输出更一致、成本更低——其优势体现在强模型通常会遗漏的细微失效模式上（cron stale-prompt 漂移、盲目重试浪费、不可逆操作缺少人工 gate）。[复现它 →](#复现-benchmark)
 
 ## 七条原则（TL;DR）
 
@@ -28,11 +38,16 @@ Loop engineering 是 prompt engineering 之后的下一门学科。prompt 优化
 ```
 loop-engineering/
 ├── SKILL.md                          # the skill itself (frontmatter + instructions)
-└── references/
-    ├── loop-patterns.md              # heartbeat / cron / hook / goal + Ralph loop
-    ├── context-engineering.md        # compaction, note-taking, sub-agents, JIT retrieval
-    ├── review-checklist.md           # per-principle diagnostic, severity-ordered
-    └── sources.md                    # the 12 source articles, with one-line summaries
+├── references/
+│   ├── loop-patterns.md              # heartbeat / cron / hook / goal + Ralph loop
+│   ├── context-engineering.md        # compaction, note-taking, sub-agents, JIT retrieval
+│   ├── review-checklist.md           # per-principle diagnostic, severity-ordered
+│   └── sources.md                    # the 12 source articles, with one-line summaries
+├── evals/                            # 验证案例库 + benchmark 证据
+│   ├── evals.json                    # 11 个评分过的 design / review / diagnose 案例
+│   ├── RESULTS.md                    # 有 skill vs 无 skill 结果，3 个 iteration
+│   └── files/                        # review 案例指向的输入脚本
+└── assets/                           # README hero 图
 ```
 
 skill 本质上是一个包含 `SKILL.md`（YAML frontmatter + Markdown）的文件夹。这种可移植性使其几乎可以安装在任何地方。
@@ -86,6 +101,20 @@ skills/loop-engineering/SKILL.md (and its references/ files).
 - *"我想要一个 agent，整晚监视 CI 并自动修复失败的 PR。"* → design mode
 - *"在我们将这个后台 worker 扩展到更多队列之前，帮我 review 一下。"* → review mode
 - *"我的 research agent 一直在消耗 token，却从未完成任务。"* → 诊断模式
+
+## 复现 benchmark
+
+上面的数字不是空谈——held-out 案例就在本 repo 里，你可以自己重跑；完整的逐 iteration 结果（含一段诚实说明 skill 在哪些地方*没有*帮助）都在 [`evals/RESULTS.md`](evals/RESULTS.md)。
+
+- **案例集**位于 [`evals/evals.json`](evals/evals.json)：11 个特意设计的棘手案例，横跨全部四种 loop pattern（heartbeat / cron / hook / goal）外加 long-horizon context，覆盖 **design**、**review**、**diagnose** 三种模式——从 CI/PR-fixer 设计、有缺陷的客服 ticket bot（代码在 [`evals/files/`](evals/files/)），到失控的研究 loop。每个案例都附带一份 `expected_output` 评分准则，列出正确答案必须命中的具体要点（machine-checkable 的 done 条件、所有 exit 都带真实数字、确定性验证、不可逆操作的 human-gate 等）。87% → 100% 这个头条数字来自其中"细微 / 规格不足"的子集；逐 iteration 的细项见 [`evals/RESULTS.md`](evals/RESULTS.md)。
+
+**方法（与头条数字相同）：**
+
+1. 每个案例把 `prompt` 跑**两次**——一次装好 skill（上面的控制流程），一次干净的 baseline 无 skill——各跑多次以平均掉方差。
+2. 每次结果都对照其 `expected_output` 准则评分（由 LLM 对照所列断言评分；准则项均写成可客观检查）。
+3. 把每个配置的逐断言通过率汇总后比较。
+
+头条数字中的通过率 / 方差 / token 汇总是用 Anthropic 的 `skill-creator` benchmark harness（`grader` + `aggregate_benchmark`）跑的，但任何"有 skill / 无 skill"对照、依准则评分，都会浮现同样的差距。Skill 的优势集中在细微的失效模式——stale-prompt 漂移、盲目重试浪费、缺少 human-gate——这些是强模型放任默认时会跳过的地方。
 
 ## 参与贡献
 
