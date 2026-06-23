@@ -1,0 +1,92 @@
+<!-- LANG-SWITCH --> [English](README.md) · **繁體中文**
+
+# Loop Engineering — 設計與審查自主 agent loop 的 skill
+
+Loop engineering 是接在 prompt engineering 之後的工程學科。一個 prompt 優化的是「單次互動」;一個 **loop** 優化的是「圍繞它的自主行為」——agent 何時跑、什麼觸發它、怎麼驗證自己的成果、何時停、何時把球交回給人。
+
+這個 skill 給 coding agent 一套實戰框架,做兩件事:
+
+- **設計模式(Design mode)** — 從零打造一個自走的 agent / loop / 背景 worker。
+- **審查模式(Review mode)** — 稽核既有 loop 的停手條件、護欄、驗證機制與升級路徑。
+
+它把 12 篇來源(Anthropic 的 context engineering、Ralph loop / RPI 方法論、Claude Code 的 agent-loop 文件,以及 2026 年的「loop engineering」寫作)收斂成七條核心原則加參考資料。
+
+> 在 benchmark 中對照「無 skill」的 baseline,於刻意設計的刁鑽案例上,這個 skill 把通過率從 87% 拉到 100%,同時答案更一致、更省 token——它的優勢出現在強模型原本會漏掉的隱晦失效模式(cron stale-prompt 腐壞、盲目重試浪費、不可逆動作缺人工閘)。
+
+## 七條核心原則(TL;DR)
+
+1. **槓桿已從 prompt 移到 loop** — 設計控制流,而非一個巨型 prompt。
+2. **「Done」必須機器可驗** — `tests pass` ✓、`improve the code` ✗。
+3. **用確定性工具驗證,絕不靠 agent 自報。**
+4. **上線前定義所有 exit** — success / failure / budget 三類 exit、no-progress 偵測、escalation 升級路徑。
+5. **把 context 當有限資源** — 修剪工具輸出;用 compaction、note-taking、sub-agent。
+6. **用檔案系統當記憶;每個 cycle 從 fresh context 開始。**
+7. **難的不是自主,是 verification、stopping、escalation。** 偏好**半自主**:把不可逆 / 對外動作擋在人工閘之後。
+
+## 內容結構
+
+```
+loop-engineering/
+├── SKILL.md                          # skill 本體(frontmatter + 指令)
+└── references/
+    ├── loop-patterns.md              # heartbeat / cron / hook / goal + Ralph loop
+    ├── context-engineering.md        # compaction、note-taking、sub-agent、JIT retrieval
+    ├── review-checklist.md           # 逐原則診斷清單,依嚴重性排序
+    └── sources.md                    # 12 篇來源文章 + 一句話摘要
+```
+
+一個 skill 就是一個含 `SKILL.md`(YAML frontmatter + Markdown)的資料夾。正因如此,它幾乎能裝在任何地方。
+
+## 安裝
+
+### Claude Code
+個人層級(所有專案)或專案層級——把資料夾複製進 `skills/` 目錄:
+
+```bash
+# 個人層級
+git clone <this-repo> ~/.claude/skills/loop-engineering
+# 或專案層級
+git clone <this-repo> .claude/skills/loop-engineering
+```
+
+開新 session,Claude 會依 `description` 自動發現它,並在你設計或審查 agent loop 時叫起來。(預先打包的 `.skill` bundle:若你用 plugin / skill 管理器,直接安裝即可。)
+
+### Codex
+Codex 原生從它的 skills 目錄載入 skill,把資料夾放進去:
+
+```bash
+git clone <this-repo> ~/.codex/skills/loop-engineering
+```
+
+若你的 Codex 是吃 `AGENTS.md`,加一行指引即可:
+`For designing or reviewing autonomous agent loops, follow skills/loop-engineering/SKILL.md.`
+
+### GitHub Copilot CLI
+Copilot 從已安裝的 plugin 自動發現 skill。把資料夾放到你的 Copilot skills / plugins 目錄(例如 `~/.copilot/skills/loop-engineering`),重啟 CLI。
+
+### Gemini CLI
+Gemini 透過它的 skill 機制啟用。把資料夾放進 Gemini skills 目錄(例如 `~/.gemini/skills/loop-engineering`);Gemini 在 session 啟動時載入 metadata、按需啟用完整內容。若你用 `GEMINI.md` 驅動 Gemini,加一行指向 `skills/loop-engineering/SKILL.md`。
+
+### Cursor / Windsurf / 任何有 instructions 檔的 agent
+這些沒有正式的 skill loader,但內容照樣可用。在你的規則 / 指令檔(`.cursorrules`、`AGENTS.md` 等)引用它:
+
+```
+當你要打造或審查自主 / 半自主 agent loop、背景 worker、或 cron / webhook 驅動的 agent 時,
+依循 skills/loop-engineering/SKILL.md(及其 references/ 檔案)的框架。
+```
+
+### 最低共識做法
+任何 LLM 工具:設計 / 審查 loop 時,把 `SKILL.md` 貼進 context;當 skill 指示時,再拉進對應的 `references/*.md`。
+
+## 怎麼用
+
+你不需要明確呼叫它——描述任務,agent 就會接手:
+
+- *「我想要一個 agent 整晚盯著 CI,自動修好失敗的 PR。」* → 設計模式
+- *「在我們把這支背景 worker 擴到更多 queue 之前,幫我 review 一下。」* → 審查模式
+- *「我的研究 agent 一直燒 token、永遠不收尾。」* → 診斷
+- *「設計一個跑到目標達成才停的 loop,別讓它失控。」* → 設計模式
+
+## 授權 / 出處
+
+萃取自關於 loop engineering、agent loop、context engineering 的公開寫作——完整來源清單與連結見 `references/sources.md`。

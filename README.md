@@ -1,0 +1,113 @@
+<!-- LANG-SWITCH --> **English** · [繁體中文](README.zh-TW.md)
+
+# Loop Engineering — a skill for designing & reviewing autonomous agent loops
+
+Loop engineering is the discipline that comes after prompt engineering. A prompt
+optimizes a single interaction; a **loop** optimizes the autonomous behavior that
+surrounds it — *when* an agent runs, *what* triggers it, *how* it verifies its own
+work, *when* it stops, and *when* it hands back to a human.
+
+This skill gives a coding agent a battle-tested framework for two jobs:
+
+- **Design mode** — build a new self-running agent / loop / background worker.
+- **Review mode** — audit an existing loop's stopping conditions, guardrails,
+  verification, and escalation paths.
+
+It distills 12 sources (Anthropic's context-engineering guidance, the Ralph loop /
+RPI methodology, Claude Code's agent-loop docs, and the 2026 "loop engineering"
+writing) into seven load-bearing principles plus reference material.
+
+> In benchmark testing against a no-skill baseline on deliberately tricky cases,
+> the skill raised the pass rate from 87% → 100% while producing more consistent,
+> cheaper answers — its edge shows up on the subtle failure modes a strong model
+> otherwise misses (cron stale-prompt drift, blind-retry waste, missing
+> human-gates on irreversible actions).
+
+## The seven principles (TL;DR)
+
+1. **Leverage moved from the prompt to the loop** — design the control flow, not one mega-prompt.
+2. **"Done" must be machine-checkable** — `tests pass` ✓, `improve the code` ✗.
+3. **Verify with deterministic tools, never the agent's self-report.**
+4. **Define all exits before going live** — success / failure / budget exits, no-progress detection, escalation path.
+5. **Treat context as a finite resource** — trim tool outputs; use compaction, note-taking, sub-agents.
+6. **Use the filesystem as memory; start each cycle with fresh context.**
+7. **The hard part is verification, stopping, and escalation — not autonomy.** Prefer *semi-autonomous*: gate irreversible/outward actions behind a human.
+
+## What's in here
+
+```
+loop-engineering/
+├── SKILL.md                          # the skill itself (frontmatter + instructions)
+└── references/
+    ├── loop-patterns.md              # heartbeat / cron / hook / goal + Ralph loop
+    ├── context-engineering.md        # compaction, note-taking, sub-agents, JIT retrieval
+    ├── review-checklist.md           # per-principle diagnostic, severity-ordered
+    └── sources.md                    # the 12 source articles, with one-line summaries
+```
+
+A skill is just a folder with a `SKILL.md` (YAML frontmatter + Markdown). That
+portability is why it installs almost anywhere.
+
+## Install
+
+### Claude Code
+Personal (all projects) or project-scoped — copy the folder into a `skills/` dir:
+
+```bash
+# personal
+git clone <this-repo> ~/.claude/skills/loop-engineering
+# or project-scoped
+git clone <this-repo> .claude/skills/loop-engineering
+```
+
+Start a new session; Claude auto-discovers it from the `description` and invokes it
+when you design or review an agent loop. (Prebuilt `.skill` bundle: install via your
+plugin/skill manager if you use one.)
+
+### Codex
+Codex loads skills natively from its skills directory. Drop the folder in:
+
+```bash
+git clone <this-repo> ~/.codex/skills/loop-engineering
+```
+
+If your Codex setup keys off `AGENTS.md` instead, add a pointer line such as:
+`For designing or reviewing autonomous agent loops, follow skills/loop-engineering/SKILL.md.`
+
+### GitHub Copilot CLI
+Copilot auto-discovers skills from installed plugins. Place the folder under your
+Copilot skills/plugins directory (e.g. `~/.copilot/skills/loop-engineering`) and
+restart the CLI.
+
+### Gemini CLI
+Gemini activates skills via its skill mechanism. Put the folder in your Gemini
+skills directory (e.g. `~/.gemini/skills/loop-engineering`); Gemini loads the
+metadata at session start and activates the full content on demand. If you drive
+Gemini through `GEMINI.md`, add a pointer line to `skills/loop-engineering/SKILL.md`.
+
+### Cursor / Windsurf / any agent with an instructions file
+These don't have a formal skill loader, but the content works as-is. Reference it
+from your rules/instructions file (`.cursorrules`, `AGENTS.md`, etc.):
+
+```
+When building or reviewing an autonomous/semi-autonomous agent loop, background
+worker, or cron/webhook-driven agent, follow the framework in
+skills/loop-engineering/SKILL.md (and its references/ files).
+```
+
+### Lowest common denominator
+Any LLM tool: paste `SKILL.md` into context when you're designing or reviewing a
+loop, and pull in a `references/*.md` file when the skill points to it.
+
+## Using it
+
+You don't invoke it explicitly — describe the task and the agent picks it up:
+
+- *"I want an agent that watches CI overnight and fixes failing PRs on its own."* → design mode
+- *"Review this background worker before we scale it to more queues."* → review mode
+- *"My research agent keeps burning tokens and never finishes."* → diagnosis
+
+## License / attribution
+
+Distilled from public writing on loop engineering, agent loops, and context
+engineering — see `references/sources.md` for the full source list and links.

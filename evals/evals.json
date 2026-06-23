@@ -1,0 +1,26 @@
+{
+  "skill_name": "loop-engineering",
+  "evals": [
+    {
+      "id": 0,
+      "name": "design-ci-pr-fixer",
+      "prompt": "I want to build an agent that watches my GitHub repo's CI overnight and automatically rebases and fixes PRs that have failing checks. The idea is it keeps trying to get each PR green on its own while I'm asleep. I'm worried about it running forever, blowing through my API budget, or merging something broken. How should I structure this so it's safe? Give me a concrete design I can actually build.",
+      "expected_output": "A concrete design (not a lecture) that nails down: a machine-checkable success condition (CI green), all the exits and guardrails with real numbers (iteration cap, token/cost budget, wall-clock, no-progress detection), deterministic verification via the CI run rather than the agent's self-report, durable state on disk so each attempt starts fresh, and an explicit human-gate before the irreversible action (merging). Should identify this as a goal/heartbeat hybrid and sketch the control flow.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "review-flawed-ticket-bot",
+      "prompt": "Here's the background worker we run that polls our support queue every 5 minutes and auto-drafts + posts replies with an LLM. Can you review it before we scale it up to more queues? It's at ticket_bot.py.",
+      "expected_output": "A review that catches the dangerous gaps, ordered by severity: no budget/iteration cap, verification by self-report (it posts and marks solved with no check), no escalation path (bare except: pass swallows everything silently), full customer history + thread dumped into context with no trimming, an irreversible outward-facing action (posting a public reply + marking solved) fired with no human gate, and no rate limiting / idempotency on the poll. Should cite where in the file each issue lives and give the highest-value fix for each.",
+      "files": ["files/ticket_bot.py"]
+    },
+    {
+      "id": 2,
+      "name": "diagnose-runaway-research-loop",
+      "prompt": "I built a research agent that self-prompts to keep digging into a market until it has a complete competitive analysis. The problem is it just keeps going — it burns tokens for ages and never decides it's actually done, and sometimes it loops over the same competitors. What am I doing wrong and how do I fix it?",
+      "expected_output": "Should diagnose the root cause as a goal loop with no machine-checkable success condition ('complete competitive analysis' is not checkable) and no no-progress/convergence detection, plus no budget cap. Fix: rewrite 'done' as a checkable endpoint (e.g. covered competitors X/Y/Z each with a named source), add hard budget + iteration caps in the controller, add no-progress/loop-fingerprint detection, and an escalation path when it can't converge. Bonus: externalize what it has already covered to a file so cycles don't repeat work.",
+      "files": []
+    }
+  ]
+}
