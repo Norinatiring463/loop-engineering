@@ -44,9 +44,9 @@ Skill은 `SKILL.md`(YAML frontmatter + Markdown)가 있는 폴더입니다. 이 
 
 ```bash
 # personal
-git clone <this-repo> ~/.claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
 # or project-scoped
-git clone <this-repo> .claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering .claude/skills/loop-engineering
 ```
 
 새 세션을 시작하면 Claude가 `description`을 통해 자동으로 발견하고, agent loop를 설계하거나 리뷰할 때 자동으로 호출합니다. (사전 빌드된 `.skill` 번들: plugin/skill 관리자를 사용하는 경우 해당 관리자를 통해 설치하세요.)
@@ -55,7 +55,7 @@ git clone <this-repo> .claude/skills/loop-engineering
 Codex는 자체 skills 디렉터리에서 skill을 기본 지원합니다. 폴더를 해당 위치에 넣으세요:
 
 ```bash
-git clone <this-repo> ~/.codex/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.codex/skills/loop-engineering
 ```
 
 Codex 설정이 `AGENTS.md`를 기준으로 하는 경우, 다음과 같은 포인터 줄을 추가하세요:

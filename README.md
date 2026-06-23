@@ -55,9 +55,9 @@ Personal (all projects) or project-scoped — copy the folder into a `skills/` d
 
 ```bash
 # personal
-git clone <this-repo> ~/.claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
 # or project-scoped
-git clone <this-repo> .claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering .claude/skills/loop-engineering
 ```
 
 Start a new session; Claude auto-discovers it from the `description` and invokes it
@@ -68,7 +68,7 @@ plugin/skill manager if you use one.)
 Codex loads skills natively from its skills directory. Drop the folder in:
 
 ```bash
-git clone <this-repo> ~/.codex/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.codex/skills/loop-engineering
 ```
 
 If your Codex setup keys off `AGENTS.md` instead, add a pointer line such as:

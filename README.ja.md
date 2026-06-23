@@ -44,9 +44,9 @@ skill とは `SKILL.md`（YAML frontmatter + Markdown）を含むフォルダに
 
 ```bash
 # personal
-git clone <this-repo> ~/.claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
 # or project-scoped
-git clone <this-repo> .claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering .claude/skills/loop-engineering
 ```
 
 新しいセッションを開始すると、Claude が `description` から自動検出し、agent loop の設計またはレビュー時に自動的に呼び出します。（ビルド済み `.skill` バンドル: plugin/skill マネージャーを使っている場合はそこからインストールしてください。）
@@ -55,7 +55,7 @@ git clone <this-repo> .claude/skills/loop-engineering
 Codex はスキルディレクトリから skill をネイティブに読み込みます。フォルダをここに配置します:
 
 ```bash
-git clone <this-repo> ~/.codex/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.codex/skills/loop-engineering
 ```
 
 Codex の設定が `AGENTS.md` を参照する場合は、以下のようなポインター行を追加します:

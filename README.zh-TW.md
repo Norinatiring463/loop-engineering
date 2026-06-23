@@ -44,9 +44,9 @@ loop-engineering/
 
 ```bash
 # 個人層級
-git clone <this-repo> ~/.claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
 # 或專案層級
-git clone <this-repo> .claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering .claude/skills/loop-engineering
 ```
 
 開新 session,Claude 會依 `description` 自動發現它,並在你設計或審查 agent loop 時叫起來。(預先打包的 `.skill` bundle:若你用 plugin / skill 管理器,直接安裝即可。)
@@ -55,7 +55,7 @@ git clone <this-repo> .claude/skills/loop-engineering
 Codex 原生從它的 skills 目錄載入 skill,把資料夾放進去:
 
 ```bash
-git clone <this-repo> ~/.codex/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.codex/skills/loop-engineering
 ```
 
 若你的 Codex 是吃 `AGENTS.md`,加一行指引即可:

@@ -44,9 +44,9 @@ skill 本质上是一个包含 `SKILL.md`（YAML frontmatter + Markdown）的文
 
 ```bash
 # 个人
-git clone <this-repo> ~/.claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
 # 或项目范围
-git clone <this-repo> .claude/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering .claude/skills/loop-engineering
 ```
 
 开启新会话；Claude 会从 description 自动发现它，并在你设计或审查 agent loop 时调用。（预构建的 `.skill` 包：如果你使用 plugin/skill 管理器，可通过其安装。）
@@ -55,7 +55,7 @@ git clone <this-repo> .claude/skills/loop-engineering
 Codex 从其 skills 目录原生加载 skill。将文件夹放入：
 
 ```bash
-git clone <this-repo> ~/.codex/skills/loop-engineering
+git clone https://github.com/maxmilian/loop-engineering ~/.codex/skills/loop-engineering
 ```
 
 如果你的 Codex 配置以 `AGENTS.md` 为入口，请添加如下指针行：
