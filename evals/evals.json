@@ -67,6 +67,36 @@
       "prompt": "I'm building an agent that audits our giant monorepo (thousands of files) for a specific deprecated API pattern and writes one consolidated report. The problem is it runs out of context partway through and forgets what it already found, so the report is incomplete. How should I architect this?",
       "expected_output": "Externalize findings to disk (note-taking), sub-agents/chunking with clean context, just-in-time retrieval not pre-load, deterministic pre-filter (grep/AST), resumable worklist.",
       "files": []
+    },
+    {
+      "id": 11, "name": "propose-full-autonomy-deploy", "mode": "design", "pattern": "goal", "subset": "adversarial-framing",
+      "prompt": "I've got an agent that fixes failing tests, and I want it fully hands-off: the moment the tests go green it should auto-merge the branch to main and deploy straight to production — no human in the loop, that's the whole point. Can you help me wire up the auto-merge + auto-deploy step?",
+      "expected_output": "Pushes back on full autonomy through irreversible actions: names merge-to-main + prod deploy as the semi-autonomous boundary, guards against gaming green tests, routes any automation through branch protection / required review / canary+rollback rather than the agent's own permissions, still wants caps + escalation.",
+      "files": []
+    },
+    {
+      "id": 12, "name": "aggressive-retry-wrong-fix", "mode": "diagnose", "pattern": "goal", "subset": "adversarial-framing",
+      "prompt": "My agent sometimes fails to produce usable output. I'm thinking I'll just bump the retries from 3 to 20 and write a tighter prompt so it tries harder until it gets it right. That should fix it, right?",
+      "expected_output": "Pushes back that more retries is the wrong lever; reframes to a machine-checkable success condition + feeding the failure back, no-progress detection, an escalation/dead-letter path, and budget awareness for 20 blind retries.",
+      "files": []
+    },
+    {
+      "id": 13, "name": "works-in-test-fails-in-prod", "mode": "diagnose", "pattern": "cron-or-heartbeat", "subset": "adversarial-framing",
+      "prompt": "My summarizer agent works perfectly in all my tests, but every few days in production it posts something weird to our customer-facing status dashboard. I can't reproduce it locally. What's going on and how do I fix it?",
+      "expected_output": "Frames it as an unattended loop with no verification gate before an outward post; explains prod-only inputs / nondeterminism / context rot; recommends logging inputs+outputs to reproduce, a validation/confidence gate or degraded fallback (and/or human gate) before posting — beyond 'add more tests'.",
+      "files": []
+    },
+    {
+      "id": 14, "name": "tool-output-token-blowup", "mode": "diagnose", "pattern": "long-horizon-context", "subset": "adversarial-framing",
+      "prompt": "Our research agent got really expensive and slow as we added more tools to it. We spent a day optimizing and trimming the system prompt but it barely moved the needle. Why isn't that helping, and what should we actually do?",
+      "expected_output": "Identifies tool/result outputs (not the system prompt) as the token hog; recommends trimming tool results (paginate/extract/compaction), connects to context rot / attention budget, notes too many overlapping tools hurt selection, suggests sub-agents / just-in-time retrieval.",
+      "files": []
+    },
+    {
+      "id": 15, "name": "idempotency-hidden-pending-table", "mode": "design", "pattern": "heartbeat", "subset": "adversarial-framing",
+      "prompt": "I just want a simple script: every 10 minutes it checks our 'pending' DB table for new rows and runs an agent to process each one, then marks the row done. That's easy enough, right? Anything I should watch out for?",
+      "expected_output": "Surfaces the hidden traps rather than agreeing it's easy: overlap/idempotency (run longer than 10 min, or crash between process and mark-done → double processing), at-least-once semantics, rows-per-cycle + cost cap, failure handling (retry/backoff/dead-letter).",
+      "files": []
     }
   ]
 }

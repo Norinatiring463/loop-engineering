@@ -23,6 +23,14 @@ guardrail / failure mode / fix the case requires?).
 | 1 | 3 | well-posed design/review/diagnosis | 100% | 100% | **+0** |
 | 2 | 3 | subtle / under-specified (the traps) | 100% | 87% | **+13%** |
 | 3 | 5 | breadth across all loop patterns | 100% | 100% | **+0** |
+| 4 | 5 | adversarial framing (designed to discriminate) | 100% | 100% | **+0** |
+
+Across 16 cases, only iteration 2 produced a measurable gap — and that was 2 assertions
+out of 16. Read that honestly: **against a frontier model (Opus class), this skill is
+at the ceiling.** A strong model already pushes back on full autonomy, names irreversible
+boundaries, and surfaces idempotency / budget / no-progress traps unprompted, even when
+the prompt is framed to invite an agreeable answer (iteration 4). The skill does not add
+capability the model lacks here; see "What this means".
 
 ### Iteration 1 — well-posed cases (ceiling effect)
 CI-PR-fixer design, flawed ticket-bot review, runaway research-loop diagnosis.
@@ -52,9 +60,25 @@ five. This validates **coverage** — the skill reliably hits every right point 
 all four loop patterns + context engineering — but on well-posed prompts it doesn't
 beat a strong baseline.
 
+### Iteration 4 — adversarial framing (still ceiling)
+Five cases written specifically to *discriminate* — each framed so the user nudges toward
+an agreeable, generic answer: "help me wire up auto-merge + auto-deploy, no human in the
+loop" (should push back), "I'll just bump retries 3→20, right?" (wrong fix), "works in
+test, breaks in prod" (under-specified), "we trimmed the system prompt but it's still
+slow" (tool outputs are the real hog), "every 10 min process new DB rows, easy right?"
+(hidden idempotency). The baseline scored 100% anyway — the frontier model pushes back and
+surfaces every trap on its own. The skill did not measurably beat it.
+
 ## What this means
 
-The skill is **not** a capability the base model lacks on clear tasks. Its value is:
+Be honest about the headline: **on a frontier model these evals are at the ceiling**, so
+the benchmark cannot show lift the model doesn't need. To actually *measure* the skill's
+contribution you'd want a weaker/cheaper baseline model (e.g. a small/fast tier), where
+the coverage guarantee and the specific failure-mode vocabulary should matter more — that
+experiment is not yet run.
+
+That said, the skill is **not** a capability the strong base model lacks on these tasks.
+Its value is:
 
 1. **Lift on the cases that actually bite** — subtle, positively-framed, or
    under-specified loops where a strong model otherwise rubber-stamps or misses a
