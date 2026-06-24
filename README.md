@@ -76,8 +76,9 @@ git clone https://github.com/maxmilian/loop-engineering .claude/skills/loop-engi
 ```
 
 Start a new session; Claude auto-discovers it from the `description` and invokes it
-when you design or review an agent loop. (Prebuilt `.skill` bundle: install via your
-plugin/skill manager if you use one.)
+when you design or review an agent loop. (Prefer a prebuilt bundle? Download
+`loop-engineering.skill` from the [latest release](https://github.com/maxmilian/loop-engineering/releases/latest)
+and install it via your plugin/skill manager.)
 
 ### Codex
 Codex loads skills natively from its skills directory. Drop the folder in:
