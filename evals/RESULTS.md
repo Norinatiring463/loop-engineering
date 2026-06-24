@@ -94,8 +94,12 @@ covered) keeps it honest.
 (cheating a validator / making tests green by deleting them), *both* configs missed it
 — so this was a genuine hole in the skill, not just a model limitation. It has since
 been added to Principle 3 and the review checklist (verifier must be read-only to the
-agent; reject changes that touch or weaken the checker). That is the eval loop doing
-its job: improving the skill, not just scoring it.
+agent; reject changes that touch or weaken the checker). **Regression-verified:** the
+two proxy-gaming cases were re-run on the weak model (Haiku) with the patched skill,
+3× each — the proxy-gaming point is now raised in **6/6** runs (was **0/2** before the
+fix), with substantive coverage (Goodhart's law, delete/weaken tests, `continue-on-error`,
+edit-the-validator, and the read-only-checker / diff-review defense). That is the eval
+loop doing its job: improving the skill, not just scoring it.
 
 ## What this means
 
